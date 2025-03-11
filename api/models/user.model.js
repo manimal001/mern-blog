@@ -1,6 +1,6 @@
-import { Timestamp } from "bson";
 import mongoose from "mongoose";
-import { emit } from "process";
+
+
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -15,9 +15,9 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true,
+        required: true,
     }
-}, {timestamps:true});
+}, {timestamps: true});
 
 
 const User = mongoose.model('User', userSchema);
