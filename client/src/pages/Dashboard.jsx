@@ -14,7 +14,8 @@ export default function Dashboard() {
        setTab(tabFromUrl);
      }
   }, [location.search]);
-  return <div className='flex flex-col min-h-screen md:flex-row'>
+  return (
+    <div className='flex flex-col min-h-screen md:flex-row'>
     <div className='md:w-56'>
        {/* Sidebar */}
       <DashSidebar />
@@ -22,4 +23,5 @@ export default function Dashboard() {
        {/* Profile */}
      { tab === 'profile' && <DashProfile/>}
     </div>
+    );
 }
