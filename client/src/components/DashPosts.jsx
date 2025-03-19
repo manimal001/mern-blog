@@ -6,15 +6,18 @@ import { Link } from 'react-router-dom';
 export default function DashPosts() {
    const { currentUser } = useSelector((state) => state.user);
    const [ userPosts, setUserPosts] = useState([]);
+   const [showMore, setShowMore] = useState(true);
   //  console.log(userPosts);
    useEffect(() => {
-     // Fetch posts from the server
       const fetchPosts = async () => {
         try {
           const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
           const data = await res.json();
           if(res.ok){
-            setUserPosts(data.posts)
+            setUserPosts(data.posts);
+            if(data.posts.length < 9 ){
+              setShowMore(false);
+            }
           }
         } catch (error) {
           console.log(error.message);
@@ -25,8 +28,26 @@ export default function DashPosts() {
       }
     
    }, [currentUser._id]);
+   
+   const handleShowMore = async () => {
+     const startIndex = userPosts.length;
+     try {
+       const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+       const data = await res.json();
+       if (res.ok){
+        setUserPosts((prev) => [...prev, ...data.posts]);
+        if(data.posts.length < 9 ){
+          setShowMore(false);
+        }
+       }
+       
+     } catch (error) {
+       console.log(error.message);
+     }
+   }
+
   return (
-    <div>
+    <div className='p-3 overflow-x-scroll table-auto md:mx-auto scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
@@ -40,20 +61,44 @@ export default function DashPosts() {
                   <span>Edit</span>
                 </Table.HeadCell>
               </Table.Head>
-             {userPosts.map((post) => {
-               <Table.Body>
-                 <Table.Row>
-                 <Table.Cell>{new Date(post.updatedAt).toLocaleDateString()} </Table.Cell>
+              {userPosts.map((post) => (
+              <Table.Body className='divide-y' key={post._id}>
+                <Table.Row className='bg-white dark:hover-gray-700 dark:bg-gray-800'>
+                  <Table.Cell>{new Date(post.updatedAt).toLocaleDateString()}</Table.Cell>
                   <Table.Cell>
                     <Link to={`/post/${post.slug}`}>
-                   <img src={post.image} alt={post.title} className='object-cover w-20 h-10 bg-gray-500' />
-                   </Link>
-                   </Table.Cell>  
-                 </Table.Row>          
-               </Table.Body>
-             })}
-              
+                      <img src={post.image} alt={post.title} className='object-cover w-20 h-10 bg-gray-500' />
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link className='font-medium text-gray-900 dark:text-white' to={`/post/${post.slug}`}>
+                    {post.title}
+                    </Link>
+                    </Table.Cell>
+                  <Table.Cell>{post.category}</Table.Cell>
+                  <Table.Cell>
+                    <span className='font-medium text-red-500 cursor-pointer hover:underline'>
+                     Delete
+                    </span>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/update-post/${post._id}`} className="text-teal-500 hover:underline">
+                     <span>
+                      Edit
+                     </span>
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            ))}         
           </Table>
+          {
+            showMore && (
+              <button onClick={handleShowMore} className='self-center w-full text-sm text-teal-500 py-7'>
+                Show More
+              </button>
+            )
+          }
 
         </>
       ):(
