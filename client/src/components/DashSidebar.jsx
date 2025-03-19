@@ -41,7 +41,7 @@ export default function DashSidebar() {
                     Profile
                 </Sidebar.Item>
                 </Link>
-                <Link to='/dashboar?tab=posts'>
+                <Link to='/dashboard?tab=posts'>
                  <Sidebar.Item
                   active={tab === 'posts'}
                   icon={HiDocumentText}
