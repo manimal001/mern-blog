@@ -57,6 +57,7 @@ export default function PostPage() {
           <CallToAction />
          </div>
          <CommentSection postId={post._id}/>
+         {error && <Alert className='mt-5' color='failure'>{Error}</Alert>}
     </main>
   )
 };
