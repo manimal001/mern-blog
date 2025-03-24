@@ -15,6 +15,6 @@ export default {
   plugins: [
     flowbite.plugin(),
     // eslint-disable-next-line no-undef
-    require("tailwind-scrollbar"),
+    require("tailwind-scrollbar"), require('@tailwindcss/line-clamp'),
   ],
 }
