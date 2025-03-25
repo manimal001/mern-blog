@@ -50,6 +50,15 @@ export default function DashSidebar() {
                   Posts
                   </Sidebar.Item>
                 </Link>
+                <Link to='/dashboard?tab=comments'>
+                 <Sidebar.Item
+                  active={tab === 'comments'}
+                  icon={HiDocumentText}
+                  as='div'
+                  >
+                  Comments
+                  </Sidebar.Item>
+                </Link>
                 <Link to='/dashboard?tab=users'>
                  <Sidebar.Item
                   active={tab === 'users'}
@@ -59,6 +68,7 @@ export default function DashSidebar() {
                   Users
                   </Sidebar.Item>
                 </Link>
+                
                 <Sidebar.Item active  icon={HiArrowSmRight} className='cursor-pointer' onClick={handleSignout} >
                     Sign Out
                 </Sidebar.Item>
